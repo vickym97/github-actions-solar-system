@@ -105,12 +105,8 @@ jobs:
             uses: azure/k8s-set-context@v3
             with:
               method: kubeconfig
-              kubeconfig: ${{ secrets.KUBECONFIG }}
-          - name: Fetch kubectl details version
-            run: |
-              kubectl version --short 
-              echo ----------------------
-              kubectl get nodes
+              kubeconfig: '${{ secrets.KUBECONFIG }}'
+          - run: kubectl version --short -o yaml
 
           - name: Fetch Nginx Ingress Controller IP 
             run: |
