@@ -107,6 +107,7 @@ jobs:
               method: kubeconfig
               kubeconfig: '${{ secrets.KUBECONFIG }}'
           - run: kubectl version --short -o yaml
+            continue-on-error: true
 
           - name: Fetch Nginx Ingress Controller IP 
             run: |
