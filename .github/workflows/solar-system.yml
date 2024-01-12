@@ -92,7 +92,6 @@ jobs:
         needs: docker
         environment:
           name: development
-          url: https://github.com/
         runs-on: ubuntu-latest
         steps:
           - name: Checkout Repo
