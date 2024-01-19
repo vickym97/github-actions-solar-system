@@ -93,6 +93,8 @@ jobs:
         environment:
           name: development
         runs-on: ubuntu-latest
+        outputs:
+          APP_INGRESS_URL: ${{ steps.set-ingress-host-address.outputs.APP_INGRESS_HOST }}          
         steps:
           - name: Checkout Repo
             uses: actions/checkout@v4
@@ -123,3 +125,13 @@ jobs:
               INGRESS_IP: ${{ env.INGRESS_IP }}
           - name: Check Files
             run: cat kubernetes/development/*.yaml
+          - name: Set APP Ingress Host URL 
+            id: set-ingress-host-address
+            run: |
+               echo "APP_INGRESS_HOST= $(kubectl -n ${{ vars.NAMESPACE}} get ingress -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> "$GITHUB_ENV"
+    integration-testing:
+        needs: dev-deploy
+        uses: ./.github/workflows/reusable-workflow.yml
+        with:
+          ingress-url: ${{ needs.dev-deploy.outputs.APP_INGRESS_URL }}
+
